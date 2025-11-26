@@ -1,8 +1,7 @@
 /* =======================================
-   NAVBAR — GLASS / NEON / RESPONSIVE
+   NAVBAR — stable typing reveal + realistic cursor
 ======================================= */
 
-/* Navbar container */
 .navbar {
   position: fixed;
   top: 0;
@@ -12,14 +11,12 @@
   transition: 0.3s ease;
 }
 
-/* Glass effect defined in base.css */
 .nav-glass {
   background: rgba(13, 15, 21, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Brand logo */
 .nav-brand {
   font-weight: 700;
   font-size: 1.3rem;
@@ -27,82 +24,83 @@
   cursor: pointer;
 }
 
-/* Nav link container */
 .nav-links {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-/* Individual link */
+/* Basic link style */
 .nav-link {
   font-size: 0.95rem;
   text-transform: capitalize;
   color: var(--text-light);
-  transition: 0.3s ease;
   text-decoration: none;
+  transition: color 0.22s ease;
   position: relative;
-  padding-left: 1.4rem;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Press Start 2P", monospace;
+  letter-spacing: 0.01em;
+  padding-right: 18px; /* reserve space for absolute cursor */
 }
 
-.nav-link::before {
-  content: "_";
-  font-family: "Press Start 2P", monospace;
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-46%);
+/* Hover glow */
+.nav-link:hover {
   color: var(--accent);
-  opacity: 0.7;
-  transition: 0.25s ease;
+  text-shadow: 0 0 6px rgba(19, 226, 221, 0.25);
 }
-/* Blinking underline for active section */
-.nav-link.active::before {
-  animation: blinkCursor 1s steps(2, start) infinite;
+
+/* Each character span - hidden keeps width so layout stable */
+.nav-char {
+  display: inline-block;
+}
+
+.nav-char.hidden {
+  visibility: hidden; /* occupies space but invisible */
+}
+
+.nav-char.visible {
+  visibility: visible;
   opacity: 1;
-  color: var(--accent);
+  transition: opacity 0.06s linear;
 }
+
+/* Active cursor: absolutely positioned inside reserved slot so it doesn't affect flow
+   Align bottom of the cursor to the text baseline by using 'bottom' in em units */
+.nav-link.active::after {
+  content: "█";
+  position: absolute;
+  right: 6px;              /* place inside reserved area */
+  bottom: 0.185em;         /* aligns block bottom to text baseline; tweak slightly if needed */
+  font-family: "Press Start 2P", monospace;
+  color: var(--accent);
+  font-size: 0.95rem;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(19, 226, 221, 0.9);
+  animation: blinkCursor 0.9s steps(1, start) infinite;
+  pointer-events: none;
+}
+
+/* blink keyframes */
 @keyframes blinkCursor {
   0% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-.nav-link:hover::before {
-  opacity: 1;
-  transform: translateY(-46%) translateX(3px);
-  text-shadow: 0 0 10px var(--accent);
-}
-.nav-link.active::before {
-  opacity: 1;
-  color: var(--accent);
-  text-shadow: 0 0 12px var(--accent);
+/* remove underlines */
+.nav-link,
+.nav-link:link,
+.nav-link:visited {
+  text-decoration: none;
 }
 
-
-/* Hover effect */
-.nav-link:hover {
-  color: var(--accent);
-  text-shadow: 0 0 10px rgba(19, 226, 221, 0.4);
-}
-
-/* Active section */
-.nav-link.active {
-  color: var(--accent) !important;
-  font-weight: 600;
-}
-
-/* Glow under active link */
-
-/* =======================================
-   MOBILE RESPONSIVE
-======================================= */
+/* responsive tweaks */
 @media (max-width: 768px) {
-  .nav-links {
-    gap: 1.3rem;
-  }
-
-  .nav-brand {
-    font-size: 1.2rem;
-  }
+  .nav-links { gap: 1.3rem; }
+  .nav-brand { font-size: 1.2rem; }
+  .nav-link { font-size: 0.88rem; padding-right: 12px; }
+  .nav-link.active::after { font-size: 0.82rem; right: 4px; bottom: 0.12em; }
 }
