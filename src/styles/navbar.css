@@ -69,7 +69,7 @@
 
 /* Active cursor: absolutely positioned inside reserved slot so it doesn't affect flow
    Align bottom of the cursor to the text baseline by using 'bottom' in em units */
-.nav-link.active::after {
+.nav-link.active.cursor-on::after {
   content: "█";
   position: absolute;
   right: 6px;              /* place inside reserved area */
@@ -102,5 +102,29 @@
   .nav-links { gap: 1.3rem; }
   .nav-brand { font-size: 1.2rem; }
   .nav-link { font-size: 0.88rem; padding-right: 12px; }
-  .nav-link.active::after { font-size: 0.82rem; right: 4px; bottom: 0.12em; }
+  /* Default: NO cursor at all for active links */
+.nav-link.active::after {
+  content: none !important;
+}
+
+/* Cursor only shows when typing is finished */
+.nav-link.active.cursor-on::after {
+  content: "█";
+  position: absolute;
+  right: 6px;
+  bottom: 0.185em;
+  font-family: "Press Start 2P", monospace;
+  color: var(--accent);
+  font-size: 0.95rem;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(19, 226, 221, 0.9);
+  animation: blinkCursor 0.9s steps(1, start) infinite;
+  pointer-events: none;
+}
+
+/* When cursor-off, force hide it ALWAYS */
+.nav-link.active.cursor-off::after {
+  content: none !important;
+}
+
 }

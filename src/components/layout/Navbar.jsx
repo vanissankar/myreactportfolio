@@ -5,9 +5,10 @@ export default function Navbar() {
   const links = ["home", "skills", "projects", "contact"];
   const [active, setActive] = useState("home");
   const [typedCount, setTypedCount] = useState({});
+  const [showCursor, setShowCursor] = useState({}); // NEW: track cursor only when typing is done
   const typingTimeoutRef = useRef(null);
 
-  // Scroll tracking to set active section
+  // Update active link on scroll
   useEffect(() => {
     const handleScroll = () => {
       links.forEach((link) => {
@@ -21,30 +22,27 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // initial check
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Typing effect with irregular delays and slower overall speed
+  // Typing effect with irregular speed + cursor only at the end
   useEffect(() => {
-    // clear any pending timeout
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = null;
-    }
+    // reset cursor when active changes
+    setShowCursor((prev) => ({ ...prev, [active]: false }));
+
+    // clear any pending timeouts
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
     const fullText = active.charAt(0).toUpperCase() + active.slice(1);
-    // start with first letter visible immediately
     setTypedCount((prev) => ({ ...prev, [active]: 1 }));
 
-    let currentIndex = 1; // we've shown the first char
+    let index = 1;
 
-    const scheduleNext = () => {
-      // Random delay to simulate human typing: base slower + jitter
-      // baseDelay ~ 170-260ms, plus jitter -80..+120
-      const base = 200; // average ms per char (slower)
-      const jitter = Math.floor(Math.random() * 160) - 40; // -40..+119
-      const delay = Math.max(60, base + jitter); // don't go too small
+    const typeNext = () => {
+      const base = 200;
+      const jitter = Math.floor(Math.random() * 160) - 40;
+      const delay = Math.max(60, base + jitter);
 
       typingTimeoutRef.current = setTimeout(() => {
         setTypedCount((prev) => {
@@ -53,26 +51,22 @@ export default function Navbar() {
           return { ...prev, [active]: next };
         });
 
-        currentIndex++;
-        if (currentIndex <= fullText.length) {
-          // schedule next char (irregular cadence)
-          scheduleNext();
-        } else {
-          // finished typing; leave as-is (no deletion)
-          typingTimeoutRef.current = null;
+        index++;
+
+        // After reaching full text → enable cursor
+        if (index > fullText.length) {
+          setShowCursor((prev) => ({ ...prev, [active]: true }));
+          return; // stop typing
         }
+
+        typeNext();
       }, delay);
     };
 
-    // If word length > 1, schedule subsequent reveals
-    if (fullText.length > 1) scheduleNext();
+    if (fullText.length > 1) typeNext();
 
-    // cleanup on active change/unmount
     return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     };
   }, [active]);
 
@@ -83,9 +77,8 @@ export default function Navbar() {
 
         <div className="nav-links">
           {links.map((link) => {
-            const isActive = active === link;
+            const isActive = link === active;
             const fullText = link.charAt(0).toUpperCase() + link.slice(1);
-            const visibleCount = typedCount[link] ?? (isActive ? 1 : fullText.length);
 
             if (!isActive) {
               return (
@@ -95,13 +88,19 @@ export default function Navbar() {
               );
             }
 
+            const typed = typedCount[link] ?? 1;
+            const cursorVisible = showCursor[link] ?? false;
+
             return (
-              <a key={link} href={`#${link}`} className="nav-link active" aria-current="page">
+              <a
+                key={link}
+                href={`#${link}`}
+                className={`nav-link active ${cursorVisible ? "cursor-on" : "cursor-off"}`}
+              >
                 {Array.from(fullText).map((ch, idx) => (
                   <span
                     key={idx}
-                    className={`nav-char ${idx < visibleCount ? "visible" : "hidden"}`}
-                    aria-hidden={idx >= visibleCount}
+                    className={`nav-char ${idx < typed ? "visible" : "hidden"}`}
                   >
                     {ch}
                   </span>
