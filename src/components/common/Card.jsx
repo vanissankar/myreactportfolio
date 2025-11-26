@@ -1,0 +1,24 @@
+export default function Card({ children, style = {} }) {
+  const cardStyle = {
+    background: "var(--card-dark)",
+    padding: "1.8rem",
+    borderRadius: "1rem",
+    border: "1px solid rgba(255,255,255,0.05)",
+    transition: "0.3s ease",
+    ...style,
+  };
+
+  const hoverStyle = {
+    borderColor: "var(--accent)",
+  };
+
+  return (
+    <div
+      style={cardStyle}
+      onMouseOver={(e) => Object.assign(e.currentTarget.style, hoverStyle)}
+      onMouseOut={(e) => Object.assign(e.currentTarget.style, cardStyle)}
+    >
+      {children}
+    </div>
+  );
+}

@@ -1,0 +1,29 @@
+:root {
+  /* COLORS */
+  --bg-dark: #0d0f15;
+  --bg-light: #131722;
+
+  --accent: #13e2dd;
+  --accent-soft: rgba(19, 226, 221, 0.2);
+
+  --text-light: #ffffff;
+  --text-muted: #b3b3b3;
+
+  /* UI COMPONENTS */
+  --radius: 14px;
+  --card-bg: #141825;
+
+  /* SHADOWS */
+  --shadow-soft: 0 0 18px rgba(19, 226, 221, 0.15);
+  --shadow-strong: 0 0 35px rgba(19, 226, 221, 0.25);
+
+  /* MAX WIDTH */
+  --container-w: 1200px;
+}
+
+/* ACCENT GRADIENT TEXT */
+.accent-text {
+  background: linear-gradient(90deg, #13e2dd, #0db8b4);
+  -webkit-background-clip: text;
+  color: transparent;
+}

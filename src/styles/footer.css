@@ -1,0 +1,41 @@
+/* =======================================
+   FOOTER — CLEAN / MINIMAL / NEON
+======================================= */
+
+.footer {
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 4rem;
+}
+
+/* Main copyright text */
+.footer-text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Built with ❤️ */
+.footer-credit {
+  margin-top: 0.5rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  transition: 0.3s ease;
+}
+
+.footer-credit:hover {
+  text-shadow: 0 0 10px var(--accent);
+}
+
+/* =======================================
+   MOBILE RESPONSIVE
+======================================= */
+@media (max-width: 768px) {
+  .footer {
+    margin-top: 3rem;
+  }
+
+  .footer-text {
+    font-size: 0.9rem;
+  }
+}

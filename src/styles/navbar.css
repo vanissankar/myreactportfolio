@@ -1,0 +1,108 @@
+/* =======================================
+   NAVBAR — GLASS / NEON / RESPONSIVE
+======================================= */
+
+/* Navbar container */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 1rem 0;
+  transition: 0.3s ease;
+}
+
+/* Glass effect defined in base.css */
+.nav-glass {
+  background: rgba(13, 15, 21, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Brand logo */
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+/* Nav link container */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Individual link */
+.nav-link {
+  font-size: 0.95rem;
+  text-transform: capitalize;
+  color: var(--text-light);
+  transition: 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.nav-link::before {
+  content: "_";
+  font-family: "Press Start 2P", monospace;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-46%);
+  color: var(--accent);
+  opacity: 0.7;
+  transition: 0.25s ease;
+}
+/* Blinking underline for active section */
+.nav-link.active::before {
+  animation: blinkCursor 1s steps(2, start) infinite;
+  opacity: 1;
+  color: var(--accent);
+}
+@keyframes blinkCursor {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.nav-link:hover::before {
+  opacity: 1;
+  transform: translateY(-46%) translateX(3px);
+  text-shadow: 0 0 10px var(--accent);
+}
+.nav-link.active::before {
+  opacity: 1;
+  color: var(--accent);
+  text-shadow: 0 0 12px var(--accent);
+}
+
+
+/* Hover effect */
+.nav-link:hover {
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(19, 226, 221, 0.4);
+}
+
+/* Active section */
+.nav-link.active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+/* Glow under active link */
+
+/* =======================================
+   MOBILE RESPONSIVE
+======================================= */
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 1.3rem;
+  }
+
+  .nav-brand {
+    font-size: 1.2rem;
+  }
+}

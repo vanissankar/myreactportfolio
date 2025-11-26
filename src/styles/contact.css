@@ -1,0 +1,88 @@
+/* =======================================
+   CONTACT SECTION CUSTOM STYLES
+======================================= */
+
+/* Wrapper */
+.contact-wrapper {
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+}
+
+/* Contact subtitle */
+.contact-subtext {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* Main email */
+.contact-email {
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 0.5rem;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.contact-email:hover {
+  text-shadow: 0 0 10px var(--accent);
+}
+
+/* Social icons container */
+.socials-container {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 2.2rem;
+  flex-wrap: wrap;
+}
+
+/* Social block */
+.social-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.social-item:hover {
+  transform: scale(1.15);
+}
+
+/* Social icon */
+.social-icon {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 0.4rem;
+  transition: 0.3s ease;
+}
+
+/* Glow on hover */
+.social-item:hover .social-icon {
+  filter: drop-shadow(0 0 14px var(--accent));
+}
+
+/* Social name text */
+.social-name {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* =======================================
+   MOBILE RESPONSIVENESS
+======================================= */
+@media (max-width: 768px) {
+  .socials-container {
+    gap: 1.5rem;
+  }
+}
+/* Make contact section hold footer at bottom */
+.contact-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

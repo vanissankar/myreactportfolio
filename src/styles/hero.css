@@ -1,0 +1,86 @@
+/* =======================================
+   HERO SECTION STYLES
+======================================= */
+
+.hero-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+/* Left text box */
+.hero-left {
+  flex: 1;
+  min-width: 280px;
+}
+
+/* Greeting text */
+.hero-greeting {
+  font-weight: 600;
+}
+
+/* Main headline */
+.hero-title {
+  margin-top: 1rem;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Description text */
+.hero-desc {
+  margin-top: 1rem;
+  color: var(--text-muted);
+  max-width: 520px;
+}
+
+/* Button group */
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Right side avatar container */
+.hero-avatar {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Avatar circle extends base.css rules */
+.hero-avatar .avatar-circle {
+  /* any extra styling specific to hero */
+}
+
+/* =======================================
+   RESPONSIVE BEHAVIOR
+======================================= */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 2.4rem;
+  }
+
+  .hero-container {
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-desc {
+    font-size: 0.95rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-avatar .avatar-circle {
+    width: 180px;
+    height: 180px;
+  }
+}
