@@ -1,27 +1,33 @@
-import Card from "../common/Card";
-import { skills } from "../../data/skills";
 import "../../styles/skills.css";
+import { skills } from "../../data/skills";
 
 export default function Skills() {
+  // Duplicate list once for perfect infinite loop
+  const fullList = [...skills, ...skills];
+
   return (
-    <section id="skills" className="container fade-in">
-      <div className="section-content">
+    <section id="skills" className="skills-section snap-section">
+      <h2 className="skills-title">Skills</h2>
 
-        <h2>Skills</h2>
-
-        <div className="skills-grid">
-          {skills.map((skill, index) => (
-            <Card key={index} className="skill-card">
-              <img
-                src={skill.icon}
-                alt={skill.name}
-                className="skill-icon"
-              />
-              <h3 className="skill-name">{skill.name}</h3>
-            </Card>
+      <div className="skills-track">
+        <div className="scroll-strip">
+          {fullList.map((skill, index) => (
+            <div key={index} className="skill-circle">
+              <img src={skill.icon} alt={skill.name} />
+              <span>{skill.name}</span>
+            </div>
           ))}
         </div>
 
+        {/* Second duplicate for seamless looping */}
+        <div className="scroll-strip">
+          {fullList.map((skill, index) => (
+            <div key={`dup-${index}`} className="skill-circle">
+              <img src={skill.icon} alt={skill.name} />
+              <span>{skill.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
