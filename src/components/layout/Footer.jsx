@@ -8,7 +8,7 @@ export default function Footer() {
       </p>
 
       <p className="footer-credit">
-        Built with ❤️ using React + Vite
+        Built with ❤️ on web development
       </p>
     </footer>
   );

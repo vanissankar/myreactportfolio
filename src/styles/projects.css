@@ -72,3 +72,38 @@
     padding: 1.5rem;
   }
 }
+/* =======================================
+   SUBTLE FLOAT ANIMATION (PROJECT CARDS)
+======================================= */
+
+@keyframes projectFloat {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.project-card {
+  animation: projectFloat 5.2s ease-in-out infinite;
+}
+
+/* Each card has unique animation timing */
+.project-card:nth-child(2) {
+  animation-duration: 5.8s;
+}
+.project-card:nth-child(3) {
+  animation-duration: 6.3s;
+}
+.project-card:nth-child(4) {
+  animation-duration: 5.5s;
+}
+.project-card:nth-child(5) {
+  animation-duration: 6.8s;
+}
+.project-card:nth-child(6) {
+  animation-duration: 5.9s;
+}
+
+/* Prevent conflict with hover lift */
+.project-card:hover {
+  animation: none; /* freeze float while hovering */
+}

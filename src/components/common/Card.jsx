@@ -1,4 +1,4 @@
-export default function Card({ children, style = {} }) {
+export default function Card({ children, style = {}, className = "" }) {
   const cardStyle = {
     background: "var(--card-dark)",
     padding: "1.8rem",
@@ -14,6 +14,7 @@ export default function Card({ children, style = {} }) {
 
   return (
     <div
+      className={className}          // ⭐ ADDED (important)
       style={cardStyle}
       onMouseOver={(e) => Object.assign(e.currentTarget.style, hoverStyle)}
       onMouseOut={(e) => Object.assign(e.currentTarget.style, cardStyle)}

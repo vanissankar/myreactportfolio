@@ -1,22 +1,19 @@
+import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+
 export const socials = [
   {
-    name: "Email",
-    url: "https://mail.google.com/mail/?view=cm&fs=1&to=anissankarv@gmail.com",
-    icon: "/icons/mail.png",
-  },
-  {
     name: "GitHub",
-    url: "https://github.com/YOUR_USERNAME",
-    icon: "/icons/github.png",
+    url: "https://github.com/yourusername",
+    icon: FaGithub,
   },
   {
     name: "LinkedIn",
-    url: "https://linkedin.com/in/YOUR_USERNAME",
-    icon: "/icons/linkedin.png",
+    url: "https://linkedin.com/in/yourusername",
+    icon: FaLinkedin,
   },
   {
     name: "Instagram",
-    url: "https://instagram.com/YOUR_USERNAME",
-    icon: "/icons/instagram.png",
+    url: "https://instagram.com/yourusername",
+    icon: FaInstagram,
   },
 ];
