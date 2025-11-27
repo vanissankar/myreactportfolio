@@ -5,10 +5,11 @@ export default function Navbar() {
   const links = ["home", "skills", "projects", "contact"];
   const [active, setActive] = useState("home");
   const [typedCount, setTypedCount] = useState({});
-  const [showCursor, setShowCursor] = useState({}); // NEW: track cursor only when typing is done
+  const [showCursor, setShowCursor] = useState({});
+  const [menuOpen, setMenuOpen] = useState(false); // ← NEW
   const typingTimeoutRef = useRef(null);
 
-  // Update active link on scroll
+  // Scroll tracking
   useEffect(() => {
     const handleScroll = () => {
       links.forEach((link) => {
@@ -26,12 +27,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Typing effect with irregular speed + cursor only at the end
+  // Typing effect
   useEffect(() => {
-    // reset cursor when active changes
     setShowCursor((prev) => ({ ...prev, [active]: false }));
 
-    // clear any pending timeouts
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
     const fullText = active.charAt(0).toUpperCase() + active.slice(1);
@@ -53,12 +52,10 @@ export default function Navbar() {
 
         index++;
 
-        // After reaching full text → enable cursor
         if (index > fullText.length) {
           setShowCursor((prev) => ({ ...prev, [active]: true }));
-          return; // stop typing
+          return;
         }
-
         typeNext();
       }, delay);
     };
@@ -71,45 +68,76 @@ export default function Navbar() {
   }, [active]);
 
   return (
-    <nav className="navbar nav-glass">
-      <div className="container flex flex-between">
-        <h1 className="nav-brand">Anis.dev</h1>
+    <>
+      <nav className="navbar nav-glass">
+        <div className="container flex flex-between">
+          <h1 className="nav-brand">Anis.dev</h1>
 
-        <div className="nav-links">
-          {links.map((link) => {
-            const isActive = link === active;
-            const fullText = link.charAt(0).toUpperCase() + link.slice(1);
+          {/* Desktop nav */}
+          <div className="nav-links desktop-only">
+            {links.map((link) => {
+              const isActive = link === active;
+              const fullText = link.charAt(0).toUpperCase() + link.slice(1);
 
-            if (!isActive) {
+              if (!isActive) {
+                return (
+                  <a key={link} href={`#${link}`} className="nav-link">
+                    {fullText}
+                  </a>
+                );
+              }
+
+              const typed = typedCount[link] ?? 1;
+              const cursorVisible = showCursor[link] ?? false;
+
               return (
-                <a key={link} href={`#${link}`} className="nav-link">
-                  {fullText}
+                <a
+                  key={link}
+                  href={`#${link}`}
+                  className={`nav-link active ${
+                    cursorVisible ? "cursor-on" : "cursor-off"
+                  }`}
+                >
+                  {Array.from(fullText).map((ch, idx) => (
+                    <span
+                      key={idx}
+                      className={`nav-char ${
+                        idx < typed ? "visible" : "hidden"
+                      }`}
+                    >
+                      {ch}
+                    </span>
+                  ))}
                 </a>
               );
-            }
+            })}
+          </div>
 
-            const typed = typedCount[link] ?? 1;
-            const cursorVisible = showCursor[link] ?? false;
-
-            return (
-              <a
-                key={link}
-                href={`#${link}`}
-                className={`nav-link active ${cursorVisible ? "cursor-on" : "cursor-off"}`}
-              >
-                {Array.from(fullText).map((ch, idx) => (
-                  <span
-                    key={idx}
-                    className={`nav-char ${idx < typed ? "visible" : "hidden"}`}
-                  >
-                    {ch}
-                  </span>
-                ))}
-              </a>
-            );
-          })}
+          {/* Hamburger icon (mobile only) */}
+          <div
+            className="hamburger mobile-only"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <span className={menuOpen ? "line open" : "line"}></span>
+            <span className={menuOpen ? "line open" : "line"}></span>
+            <span className={menuOpen ? "line open" : "line"}></span>
+          </div>
         </div>
+      </nav>
+
+      {/* Mobile dropdown menu */}
+      <div className={`mobile-menu ${menuOpen ? "show" : ""}`}>
+        {links.map((link) => (
+          <a
+            key={link}
+            href={`#${link}`}
+            className="nav-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            {link.charAt(0).toUpperCase() + link.slice(1)}
+          </a>
+        ))}
       </div>
-    </nav>
+    </>
   );
 }

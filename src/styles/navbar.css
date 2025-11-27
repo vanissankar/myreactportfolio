@@ -128,3 +128,106 @@
 }
 
 }
+/* ===========================
+   MOBILE NAV — WRAP TO NEXT LINE
+=========================== */
+@media (max-width: 768px) {
+
+  .navbar {
+    display: flex;
+    flex-direction: column;   /* stack brand + links */
+    align-items: center;
+    padding: 1rem 0 0.5rem 0;
+    gap: 0.6rem;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;          /* allow links to extend */
+    justify-content: center;
+    gap: 1.2rem 1.8rem;       /* row-gap column-gap */
+    width: 100%;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+    padding-left: 1.6rem;     /* keep cursor space */
+    white-space: nowrap;      /* clean looking */
+  }
+
+  /* Cursor stays aligned */
+  .nav-link::before {
+    left: 0; 
+    top: 50%;
+    transform: translateY(-50%) scale(0.85);
+  }
+}
+/* Desktop only */
+.desktop-only {
+  display: flex;
+}
+
+/* Mobile only (default hidden) */
+.mobile-only {
+  display: none;
+}
+
+/* ==============================
+   HAMBURGER MENU (MOBILE)
+============================== */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 1100;
+  }
+
+  .hamburger .line {
+    width: 26px;
+    height: 3px;
+    background: var(--text-light);
+    border-radius: 2px;
+    transition: 0.35s ease;
+  }
+
+  /* Animated X */
+  .hamburger .line.open:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger .line.open:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger .line.open:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* ==============================
+     MOBILE SLIDE MENU
+  ============================== */
+  .mobile-menu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 12, 16, 0.92);
+    backdrop-filter: blur(12px);
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    align-items: center;
+    transform: translateY(-120%);
+    transition: transform 0.35s ease;
+    z-index: 1099;
+  }
+
+  .mobile-menu.show {
+    transform: translateY(0);
+  }
+}

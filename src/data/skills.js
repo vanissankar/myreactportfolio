@@ -1,9 +1,19 @@
+import {
+  SiHtml5,
+  SiCss3,
+  SiJavascript,
+  SiReact,
+  SiNodedotjs,
+  SiPython,
+  SiGit,
+} from "react-icons/si";
+
 export const skills = [
-  { name: "HTML", icon: "/assets/icons/html.svg" },
-  { name: "CSS", icon: "/assets/icons/css.svg" },
-  { name: "JavaScript", icon: "/assets/icons/js.svg" },
-  { name: "React", icon: "/assets/icons/react.svg" },
-  { name: "Node.js", icon: "/assets/icons/node.svg" },
-  { name: "Python", icon: "/assets/icons/python.svg" },
-  { name: "Git", icon: "/assets/icons/git.svg" }
+  { name: "HTML", icon: SiHtml5 },
+  { name: "CSS", icon: SiCss3 },
+  { name: "JavaScript", icon: SiJavascript },
+  { name: "React", icon: SiReact },
+  { name: "Node.js", icon: SiNodedotjs },
+  { name: "Python", icon: SiPython },
+  { name: "Git", icon: SiGit },
 ];
