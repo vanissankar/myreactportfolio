@@ -8,26 +8,50 @@ import Skills from "./components/sections/Skills";
 import Projects from "./components/sections/Projects";
 import Contact from "./components/sections/Contact";
 import EscapeModal from "./components/common/EscapeModal";
+import IntroOverlay from "./components/common/IntroOverlay";
 
 export default function App() {
 
-  /* ------------------------------------
-      15-second looping navbar timer
-  ------------------------------------- */
+  /* ================================
+     GLOBAL STATES
+  ================================ */
 
   const START_15 = 15;
-  const [timer15, setTimer15] = useState(START_15);
 
+  const [timer15, setTimer15] = useState(START_15);
   const [escapeOpen, setEscapeOpen] = useState(false);
   const [escapeKey, setEscapeKey] = useState(0);
 
   const [blackholeActive, setBlackholeActive] = useState(false);
   const [restartVisible, setRestartVisible] = useState(false);
 
-  // NEW ---- SOUND CONTROL
+  // NEW — intro must finish before anything starts
+  const [introDone, setIntroDone] = useState(false);
+
+  // sound allow state
   const [soundEnabled, setSoundEnabled] = useState(true);
 
+  /* ================================
+     AUDIO REFS
+  ================================ */
+  const tickRef = useRef(null);
+  const galaxyRef = useRef(null);
+
   useEffect(() => {
+    tickRef.current = new Audio("/sounds/tick.wav");
+    tickRef.current.volume = 0.25;
+
+    galaxyRef.current = new Audio("/sounds/galaxy.wav");
+    galaxyRef.current.volume = 0.9;
+    galaxyRef.current.loop = true;
+  }, []);
+
+  /* ================================
+     15s MAIN TIMER (runs ONLY after intro)
+  ================================ */
+  useEffect(() => {
+    if (!introDone) return; // stop timer before intro tap
+
     setTimer15(START_15);
 
     const iv = setInterval(() => {
@@ -42,30 +66,22 @@ export default function App() {
     }, 1000);
 
     return () => clearInterval(iv);
-  }, []);
+  }, [introDone]);
 
-  /* ------------------------------------
-      TICK SOUND — only in allowed states
-  ------------------------------------- */
-
-  const tickRef = useRef(null);
-
+  /* ================================
+     TICK SOUND CONTROL
+  ================================ */
   useEffect(() => {
-    tickRef.current = new Audio("/sounds/tick.wav");
-    tickRef.current.volume = 0.25;
-    tickRef.current.loop = false;
-  }, []);
-
-  useEffect(() => {
+    if (!introDone) return; // block audio until tap
     if (!tickRef.current) return;
 
-    const shouldPlay =
-      soundEnabled &&         // <- IMPORTANT
+    const ok =
+      soundEnabled &&
       !escapeOpen &&
       !blackholeActive &&
       !restartVisible;
 
-    if (shouldPlay) {
+    if (ok) {
       tickRef.current.currentTime = 0;
       tickRef.current.play().catch(() => {});
     } else {
@@ -77,137 +93,158 @@ export default function App() {
     escapeOpen,
     blackholeActive,
     restartVisible,
-    soundEnabled
+    soundEnabled,
+    introDone
   ]);
-  /* ------------------------------------
-   GALAXY AMBIENT MUSIC
-------------------------------------- */
-const galaxyRef = useRef(null);
 
-// load once
-useEffect(() => {
-  galaxyRef.current = new Audio("/sounds/galaxy.wav");
-  galaxyRef.current.volume = 0.9;
-  galaxyRef.current.loop = true;
-}, []);
-
-// play only in safe state (same rule as tick)
-useEffect(() => {
-  if (!galaxyRef.current) return;
-
-  const shouldPlay =
-    !escapeOpen &&
-    !blackholeActive &&
-    !restartVisible;
-
-  if (shouldPlay) {
-    galaxyRef.current.play().catch(() => {});
-  } else {
-    galaxyRef.current.pause();
-  }
-}, [timer15, escapeOpen, blackholeActive, restartVisible]);
-
-
-  /* ------------------------------------
-      Smooth accent color fade
-  ------------------------------------- */
-
+  /* ================================
+     GALAXY MUSIC CONTROL
+  ================================ */
   useEffect(() => {
-    const progress = Math.max(0, Math.min(timer15, 15));
-    let blend = 1 - (progress - 5) / 10;
+    if (!introDone) return;
+    if (!galaxyRef.current) return;
+
+    const ok =
+      soundEnabled &&
+      !escapeOpen &&
+      !blackholeActive &&
+      !restartVisible;
+
+    if (ok) {
+      galaxyRef.current.play().catch(() => {});
+    } else {
+      galaxyRef.current.pause();
+    }
+  }, [
+    escapeOpen,
+    blackholeActive,
+    restartVisible,
+    soundEnabled,
+    introDone
+  ]);
+
+  /* ================================
+     ACCENT COLOR FADE WITH TIMER
+  ================================ */
+  useEffect(() => {
+    if (!introDone) return;
+
+    const p = Math.max(0, Math.min(timer15, 15));
+    let blend = 1 - (p - 5) / 10;
     blend = Math.min(Math.max(blend, 0), 1);
 
     const blue = [19, 226, 221];
     const red = [255, 59, 59];
 
-    const mixed = blue.map((b, i) => Math.round(b + (red[i] - b) * blend));
-
-    document.documentElement.style.setProperty(
-      "--accent",
-      `rgb(${mixed[0]}, ${mixed[1]}, ${mixed[2]})`
+    const mixed = blue.map((b, i) =>
+      Math.round(b + (red[i] - b) * blend)
     );
 
     document.documentElement.style.setProperty(
+      "--accent",
+      `rgb(${mixed[0]},${mixed[1]},${mixed[2]})`
+    );
+    document.documentElement.style.setProperty(
       "--accent-soft",
-      `rgba(${mixed[0]}, ${mixed[1]}, ${mixed[2]}, 0.15)`
+      `rgba(${mixed[0]},${mixed[1]},${mixed[2]},0.15)`
     );
 
     if (timer15 <= 5) document.body.classList.add("red-theme");
     else document.body.classList.remove("red-theme");
-  }, [timer15]);
-  
+  }, [timer15, introDone]);
 
-  /* ------------------------------------
-      STARFIELD V2
-  ------------------------------------- */
-
+  /* ================================
+     STARFIELD — only after intro
+  ================================ */
   useEffect(() => {
+    if (!introDone) return;
+
     const createStars = (layer, count, min, max) => {
-      const container = document.getElementById(layer);
-      if (!container) return;
-      container.innerHTML = "";
+      const el = document.getElementById(layer);
+      if (!el) return;
+      el.innerHTML = "";
 
       for (let i = 0; i < count; i++) {
-        const star = document.createElement("div");
-        star.className = "star";
+        const s = document.createElement("div");
+        s.className = "star";
 
         const size = min + Math.random() * max;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
+        s.style.width = `${size}px`;
+        s.style.height = `${size}px`;
 
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.left = `${Math.random() * 100}%`;
+        s.style.top = `${Math.random() * 100}%`;
+        s.style.left = `${Math.random() * 100}%`;
 
-        star.style.animationDuration = `${2 + Math.random() * 3}s`;
+        s.style.animationDuration = `${2 + Math.random() * 3}s`;
 
-        container.appendChild(star);
+        el.appendChild(s);
       }
     };
 
     createStars("stars-layer1", 60, 1, 2);
     createStars("stars-layer2", 40, 2, 3);
     createStars("stars-layer3", 20, 3, 4);
-  }, []);
+  }, [introDone]);
 
+  /* ================================
+     RENDER
+  ================================ */
   return (
     <>
-      <Navbar timer15={timer15} />
+      {/* INTRO OVERLAY ALWAYS FIRST */}
+      {!introDone && (
+        <IntroOverlay
+          onStart={() => {
+            setIntroDone(true);
 
-      <div id="stars-layer1" className="star-layer"></div>
-      <div id="stars-layer2" className="star-layer"></div>
-      <div id="stars-layer3" className="star-layer"></div>
+            // start audio immediately when user taps
+            setTimeout(() => {
+              tickRef.current?.play().catch(() => {});
+              galaxyRef.current?.play().catch(() => {});
+            }, 50);
+          }}
+        />
+      )}
 
-      <main>
-        <Hero />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
+      {introDone && (
+        <>
+          <Navbar timer15={timer15} />
 
-      {/* ESCAPE MODAL */}
-      {escapeOpen && (
-  <EscapeModal
-    key={escapeKey}
-    onClose={() => {
-      setEscapeOpen(false);
-      setTimer15(START_15);  // <<< FULL RESET OF MAIN 15s TIMER
-    }}
-    onFailBlackhole={() => {
-      setBlackholeActive(true);
-      setSoundEnabled(false);
-    }}
-    onRestart={() => {
-      setRestartVisible(false);
-      setBlackholeActive(false);
-      setSoundEnabled(true);
-      setTimer15(START_15); // restart also resets sound & timer
-    }}
-    onRestartShow={() => setRestartVisible(true)}
-  />
-)}
+          <div id="stars-layer1" className="star-layer"></div>
+          <div id="stars-layer2" className="star-layer"></div>
+          <div id="stars-layer3" className="star-layer"></div>
 
-          
-      
+          <main>
+            <Hero />
+            <Skills />
+            <Projects />
+            <Contact />
+          </main>
+
+          {escapeOpen && (
+            <EscapeModal
+              key={escapeKey}
+              onClose={() => {
+                setEscapeOpen(false);
+                setTimer15(START_15);
+              }}
+              onFailBlackhole={() => {
+                setBlackholeActive(true);
+                setSoundEnabled(false);
+              }}
+              onRestart={() => {
+                setRestartVisible(false);
+                setBlackholeActive(false);
+                setSoundEnabled(true);
+                setTimer15(START_15);
+              }}
+              onRestartShow={() => setRestartVisible(true)}
+            />
+          )}
+
+          <Footer />
+        </>
+      )}
     </>
   );
 }
