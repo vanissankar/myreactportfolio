@@ -1,23 +1,23 @@
 export const projects = [
   {
-    title: "Color Contrast Collection",
+    title: "AASMS",
     description:
-      "A curated UI palette tool that helps designers choose perfect color contrasts.",
-    tech: ["React", "Tailwind", "CSS"],
-    url: "https://your-link.com",
+      "A smart, automated platform that streamlines student attendance with real-time tracking, analytics, and easy management for institutions. Designed for accuracy, speed, and scalable integration with modern academic workflows.",
+    tech: ["Html", "Js", "CSS","Firebase"],
+    url: "https://vanissankar.github.io/aasmss/",
   },
   {
-    title: "Codevertiser",
+    title: "WMtutor",
     description:
-      "A tool that converts code snippets into beautiful promotional graphics.",
-    tech: ["React", "Node.js"],
-    url: "https://your-link.com",
+      "An interactive platform that teaches smart waste handling, offers disposal guidance, and promotes eco-friendly habits through simple tools and community-driven resources.",
+    tech: ["Html", "Js", "CSS","Firebase"],
+    url: "https://vanissankar.github.io/wmtutor/",
   },
   {
-    title: "Smart Form Generator",
+    title: "Kamadhenu",
     description:
-      "A form builder with automation, templates, admin dashboard, and image/file optimization.",
-    tech: ["Flask", "SQLite", "HTML", "CSS", "JS"],
-    url: "https://your-link.com",
+      "A digital platform that simplifies cattle tracking, health monitoring, and farm operations, helping farmers improve productivity and ensure better livestock management.",
+    tech: ["React.js", "Mangodb", "CSS", "JS"],
+    url: "https://vanissankar.github.io/kamadhenu/",
   },
 ];
