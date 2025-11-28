@@ -1,0 +1,199 @@
+/* ================================
+   ESCAPE OVERLAY
+================================ */
+
+.escape-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ================================
+   PIXEL CARD
+================================ */
+
+.pixel-card {
+  background: #0f0f18;
+  border: 2px solid #2ff5ff;
+  padding: 2rem 2.4rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(19,226,221,0.25);
+  animation: popIn 0.28s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.escape-title {
+  font-family: "Press Start 2P";
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 1.2rem;
+}
+
+.escape-word {
+  font-family: "Press Start 2P";
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.pixel-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: "Press Start 2P";
+  background: #11131b;
+  border: 2px solid #2ff5ff;
+  color: #e0ffff;
+  font-size: 0.9rem;
+  outline: none;
+  text-align: center;
+}
+
+.escape-timer {
+  margin-top: 1rem;
+  font-family: "Press Start 2P";
+  font-size: 0.9rem;
+  color: #ffed47;
+}
+
+.escape-message {
+  margin-top: 1.3rem;
+  font-family: "Press Start 2P";
+  color: #ff6060;
+  font-size: 1rem;
+}
+
+/* ================================
+   BLACK HOLE ABSORB ANIMATION
+================================ */
+
+body.blackhole-active * {
+  animation: suck 1.8s cubic-bezier(.17,.67,.83,.67) forwards;
+}
+
+@keyframes suck {
+  0%   { transform: translate(0,0) scale(1); opacity: 1; }
+  100% {
+    transform: translate(50vw, 90vh) scale(0.05);
+    opacity: 0;
+  }
+}
+/* ==========================================
+   BLACK HOLE V2 — center expansion + pull
+========================================== */
+
+/* The expanding black hole */
+.blackhole-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 0px;
+  height: 0px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, #000000 60%, #000000cc 85%, transparent 100%);
+  border-radius: 50%;
+  z-index: 9999999;
+  animation: growHole 1.8s cubic-bezier(.4,0,.3,1) forwards;
+  pointer-events: none;
+}
+
+/* Growing animation */
+@keyframes growHole {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.4;
+  }
+  60% {
+    width: 500px;
+    height: 500px;
+    opacity: 0.9;
+  }
+  100% {
+    width: 2000px;
+    height: 2000px;
+    opacity: 1;
+  }
+}
+
+
+/* SUCTION of all content into black hole */
+body.blackhole-v2 *:not(.blackhole-center):not(.escape-overlay) {
+  animation: pullToHole 1.8s cubic-bezier(.22,.67,.52,1) forwards !important;
+}
+
+/* The gravitational sucking motion */
+@keyframes pullToHole {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  40% {
+    transform: translate(-10px, -10px) scale(0.95);
+    opacity: 0.9;
+    filter: blur(2px);
+  }
+  65% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0.6;
+    filter: blur(4px);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(0);
+    opacity: 0;
+    filter: blur(12px);
+  }
+}
+
+.restart-btn {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  z-index: 999999999 !important;
+
+  /* --- PROTECT FROM BLUR / TRANSFORMS / ANIMATION --- */
+  filter: none !important;
+  backdrop-filter: none !important;
+  transform-origin: center !important;
+  will-change: auto !important;
+  isolation: isolate !important;     /* <- THIS IS THE FIX */
+  contain: layout paint !important;  /* prevents blur bleeding in */
+  pointer-events: auto !important;
+
+  /* --- VISUALS --- */
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  padding: 14px 28px;
+  background: #0d0f15;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.95rem;
+  border-radius: 10px;
+
+  box-shadow: 0 0 20px rgba(19,226,221,0.4);
+  text-shadow: 0 0 8px var(--accent);
+
+  /* Disable animations completely */
+  animation: none !important;
+  transition: none !important;
+}

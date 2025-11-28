@@ -1,0 +1,109 @@
+/* Timer pill in navbar */
+.timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-light);
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  min-width: 86px;
+  justify-content: center;
+}
+
+.timer-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #13e2dd; /* neon blue */
+  box-shadow: 0 0 8px #13e2dd;
+}
+
+/* when paused/stopped */
+.timer-pill.stopped .timer-dot {
+  background: #ff4d4d;
+  box-shadow: 0 0 10px #ff4d4d;
+}
+
+/* Warning mode: slow accent shift to red */
+/* The .game-warning body class is toggled by App.jsx when <=6s */
+body.game-warning {
+  transition: --accent 4s linear;
+  --accent: #ff3b30; /* red */
+  --accent: #ff4949 !important;
+}
+
+/* For the rest of the site to smoothly respond to accent change,
+   your base theme should use var(--accent) for glows and accents.
+   The body.game-warning class above simply changes the variable.
+*/
+
+/* LOST mode */
+body.game-lost {
+  cursor: default;
+}
+
+/* Main free-fall animation — apply .free-fall to <main> */
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  60% { transform: translateY(60vh) rotate(8deg); opacity: 0.9; }
+  100% { transform: translateY(110vh) rotate(18deg); opacity: 0; }
+}
+
+main.free-fall > * {
+  animation: fall 1.2s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+/* Add staggered delays for child elements so they fall in cascade */
+main.free-fall > *:nth-child(1) { animation-delay: 0s; }
+main.free-fall > *:nth-child(2) { animation-delay: 0.08s; }
+main.free-fall > *:nth-child(3) { animation-delay: 0.14s; }
+main.free-fall > *:nth-child(4) { animation-delay: 0.20s; }
+main.free-fall > *:nth-child(5) { animation-delay: 0.28s; }
+
+/* Lost overlay (message) styling */
+.lost-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.lost-card {
+  pointer-events: auto;
+  background: rgba(8,8,8,0.85);
+  color: #fff;
+  padding: 2rem 2.4rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  text-align: center;
+}
+/* Gravity zone */
+body.game-lost main, 
+body.game-lost nav, 
+body.game-lost footer,
+body.game-lost * {
+  animation: fallDown 1.6s cubic-bezier(.2, .9, .4, 1) forwards;
+}
+
+/* The pile at the bottom */
+@keyframes fallDown {
+  0% { transform: translateY(0) rotate(0); }
+  70% { transform: translateY(70vh) rotate(6deg); }
+  100% { transform: translateY(85vh) rotate(12deg); }
+}
+
+/* Enable dragging after fall */
+body.game-lost * {
+  cursor: grab;
+}
+
+body.game-lost *.dragging {
+  cursor: grabbing;
+}

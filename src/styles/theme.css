@@ -3,8 +3,9 @@
   --bg-dark: #0d0f15;
   --bg-light: #131722;
 
-  --accent: #13e2dd;
-  --accent-soft: rgba(19, 226, 221, 0.2);
+  /* MAIN ACCENT (animated between blue → red) */
+  --accent: #13e2dd; /* default neon blue */
+  --accent-soft: rgba(19, 226, 221, 0.20);
 
   --text-light: #ffffff;
   --text-muted: #b3b3b3;
@@ -19,11 +20,58 @@
 
   /* MAX WIDTH */
   --container-w: 1200px;
+
+  /* Smooth global animation */
+  transition:
+    --accent 0.8s ease,
+    --accent-soft 0.8s ease,
+    --shadow-soft 0.8s ease,
+    --shadow-strong 0.8s ease,
+    background-color 0.8s ease,
+    color 0.8s ease,
+    filter 0.8s ease;
 }
 
-/* ACCENT GRADIENT TEXT */
+/* GRADIENT TEXT (auto-updates with accent) */
 .accent-text {
-  background: linear-gradient(90deg, #13e2dd, #0db8b4);
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* =====================================
+   DANGER MODE — ACTIVE WHEN TIMER <= 5
+===================================== */
+
+body.red-theme {
+  /* Main accent changes to neon red */
+  --accent: #ff3b3b;
+  --accent-soft: rgba(255, 59, 59, 0.22);
+
+  /* Shadows shift to red glow */
+  --shadow-soft: 0 0 18px rgba(255, 59, 59, 0.18);
+  --shadow-strong: 0 0 35px rgba(255, 59, 59, 0.28);
+
+  /* Optional slight red tint for background */
+  filter: saturate(1.2) brightness(1.03);
+}
+
+/* =====================================
+   OPTIONAL: EXTRA SMOOTH RED PULSE
+   (applies ONLY when in danger mode)
+===================================== */
+body.red-theme .pulse-accent {
+  animation: redPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes redPulse {
+  0%   { filter: drop-shadow(0 0 4px var(--accent)); }
+  10%  { filter: drop-shadow(0 0 14px var(--accent)); }
+  20%  { filter: drop-shadow(0 0 14px var(--accent)); }
+  30%  { filter: drop-shadow(0 0 14px var(--accent)); }
+  40%  { filter: drop-shadow(0 0 14px var(--accent)); }
+  50%  { filter: drop-shadow(0 0 14px var(--accent)); }
+  60%  { filter: drop-shadow(0 0 14px var(--accent)); }
+  80%  { filter: drop-shadow(0 0 14px var(--accent)); }
+  100% { filter: drop-shadow(0 0 4px var(--accent)); }
 }

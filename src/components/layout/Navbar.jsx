@@ -1,13 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import "../../styles/navbar.css";
 
-export default function Navbar() {
+export default function Navbar({ timer15 = 15 }) {
   const links = ["home", "skills", "projects", "contact"];
   const [active, setActive] = useState("home");
   const [typedCount, setTypedCount] = useState({});
   const [showCursor, setShowCursor] = useState({});
   const [menuOpen, setMenuOpen] = useState(false); // ← NEW
   const typingTimeoutRef = useRef(null);
+  const ss = String(timer15).padStart(2, "0");
 
   // Scroll tracking
   useEffect(() => {
@@ -72,6 +73,10 @@ export default function Navbar() {
       <nav className="navbar nav-glass">
         <div className="container flex flex-between">
           <h1 className="nav-brand">Anis.dev</h1>
+          <div className="nav-timer-pill" aria-hidden="false" title="15 second loop">
+            <span className="nav-timer-dot" />
+            <span className="nav-timer-text">{ss}s</span>
+          </div>
 
           {/* Desktop nav */}
           <div className="nav-links desktop-only">
