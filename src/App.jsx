@@ -79,6 +79,34 @@ export default function App() {
     restartVisible,
     soundEnabled
   ]);
+  /* ------------------------------------
+   GALAXY AMBIENT MUSIC
+------------------------------------- */
+const galaxyRef = useRef(null);
+
+// load once
+useEffect(() => {
+  galaxyRef.current = new Audio("/sounds/galaxy.wav");
+  galaxyRef.current.volume = 0.9;
+  galaxyRef.current.loop = true;
+}, []);
+
+// play only in safe state (same rule as tick)
+useEffect(() => {
+  if (!galaxyRef.current) return;
+
+  const shouldPlay =
+    !escapeOpen &&
+    !blackholeActive &&
+    !restartVisible;
+
+  if (shouldPlay) {
+    galaxyRef.current.play().catch(() => {});
+  } else {
+    galaxyRef.current.pause();
+  }
+}, [timer15, escapeOpen, blackholeActive, restartVisible]);
+
 
   /* ------------------------------------
       Smooth accent color fade
@@ -107,6 +135,7 @@ export default function App() {
     if (timer15 <= 5) document.body.classList.add("red-theme");
     else document.body.classList.remove("red-theme");
   }, [timer15]);
+  
 
   /* ------------------------------------
       STARFIELD V2
@@ -177,19 +206,7 @@ export default function App() {
   />
 )}
 
-          onFailBlackhole={() => {
-            setBlackholeActive(true);
-            setSoundEnabled(false);   // <- STOP SOUND FOREVER
-          }}
-          onRestart={() => {
-            setRestartVisible(false);
-            setBlackholeActive(false);
-            setSoundEnabled(true);    // <- ONLY HERE SOUND STARTS AGAIN
-          }}
-          onRestartShow={() => setRestartVisible(true)}
-        />
-      )}
-
+          
       <Footer />
     </>
   );
